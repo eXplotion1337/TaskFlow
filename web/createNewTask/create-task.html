@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TaskFlow - Создать задачу</title>
+    <!-- Подключаем стили Bootstrap и пользовательские стили -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="../main/main.html" id="TaskFlowLink">TaskFlow</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="create-task.html" id="createNewTask">Create New Task</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Chat</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">About Me</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container content">
+        <div class="row mt-4">
+            <div class="col-md">
+                <h2>Создать новую задачу</h2>
+                <form id="createTaskForm">
+                    <div class="form-group">
+                        <label for="taskTitle">Название задачи</label>
+                        <input type="text" class="form-control" id="taskTitle" placeholder="Введите название задачи">
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDescription">Описание задачи</label>
+                        <textarea class="form-control" id="taskDescription" rows="4" placeholder="Введите описание задачи"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskAssignee">Исполнитель</label>
+                        <input type="text" class="form-control" id="taskAssignee" placeholder="Введите имя исполнителя">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Создать задачу</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Подключаем скрипты Bootstrap и пользовательский JavaScript, а также библиотеку Sortable.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="../scripts/script.js"></script>
+
+    <script>
+        document.getElementById("dashboardLink").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "http://localhost:8080/dashboard"; // Выполнить редирект на желаемую страницу
+        });
+
+        document.getElementById("createNewTask").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "http://localhost:8080/createNewTask"; // Выполнить редирект на желаемую страницу
+        });
+
+        document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "http://localhost:8080/"; // Выполнить редирект на желаемую страницу
+        });
+
+        document.getElementById("createTaskForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие отправки формы
+
+            // Соберите данные из формы в объект JSON
+            let formData = {
+                taskTitle: document.getElementById("taskTitle").value,
+                taskDescription: document.getElementById("taskDescription").value,
+                taskAssignee: document.getElementById("taskAssignee").value
+            };
+
+            // Отправьте POST-запрос на сервер
+            fetch("http://localhost:8080/createNewTask", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+                .then(function(response) {
+                    // Обработайте ответ от сервера, если необходимо
+                })
+                .catch(function(error) {
+                    // Обработайте ошибку, если она произошла
+                    console.error("Произошла ошибка при отправке запроса:", error);
+                });
+        });
+
+    </script>
+
+</body>
+</html>

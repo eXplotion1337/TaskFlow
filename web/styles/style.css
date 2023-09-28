@@ -1,0 +1,69 @@
+
+
+.navbar-toggler {
+    border-color: #000; /* Черная рамка для кнопки бургера */
+}
+
+.navbar-nav {
+    margin: 0 auto; /* Центрируем кнопки навигации */
+    display: flex; /* Распределение элементов в виде строки */
+    justify-content: space-between; /* Равномерное распределение элементов */
+    width: 80%; /* Занимать 80% доступной ширины */
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #000; /* Черный текст для названия сайта */
+}
+
+.navbar-nav .nav-link {
+    color: #000; /* Черный текст для ссылок */
+    flex-grow: 1; /* Расширение элементов */
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #555; /* Цвет текста при наведении на ссылку */
+}
+
+/* Удаляем синий фон и стили для header */
+.header {
+    display: none;
+}
+
+/* Стили для навигационной панели */
+.navbar {
+    margin-bottom: 20px;
+}
+
+.navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar-toggler {
+    border-color: #333;
+}
+
+.nav-link {
+    color: #333;
+}
+
+.nav-link:hover {
+    color: #555;
+}
+
+/* Удаляем стили для .task-form и .task-list */
+.task-form,
+.task-list {
+    display: none;
+}
+
+/* Добавляем обводку для колонок */
+.column {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
