@@ -19,6 +19,9 @@
                     <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="create-task.html" id="createNewTask">Create New Task</a>
                 </li>
                 <li class="nav-item">
@@ -36,12 +39,24 @@
                 <h2>Создать новую задачу</h2>
                 <form id="createTaskForm">
                     <div class="form-group">
+                        <label for="NameProjects">Проект</label>
+                        <input type="text" class="form-control" id="NameProjects" placeholder="Введите название проекта">
+                    </div>
+                    <div class="form-group">
                         <label for="taskTitle">Название задачи</label>
                         <input type="text" class="form-control" id="taskTitle" placeholder="Введите название задачи">
                     </div>
                     <div class="form-group">
                         <label for="taskDescription">Описание задачи</label>
                         <textarea class="form-control" id="taskDescription" rows="4" placeholder="Введите описание задачи"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="TimeStart">Время начала</label>
+                        <textarea class="form-control" id="TimeStart"  placeholder="Введите время начала "></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="TimeEnd">Время начала</label>
+                        <textarea class="form-control" id="TimeEnd"  placeholder="Введите время завершения "></textarea>
                     </div>
                     <div class="form-group">
                         <label for="taskAssignee">Исполнитель</label>
@@ -75,6 +90,11 @@
             window.location.href = "./"; // Выполнить редирект на желаемую страницу
         });
 
+        document.getElementById("createNewProject").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+        });
+
         document.getElementById("createTaskForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Предотвратить стандартное действие отправки формы
 
@@ -82,6 +102,9 @@
             let formData = {
                 taskTitle: document.getElementById("taskTitle").value,
                 taskDescription: document.getElementById("taskDescription").value,
+                TimeStart: document.getElementById("TimeStart").value,
+                TimeEnd: document.getElementById("TimeEnd").value,
+                NameProjects: document.getElementById("NameProjects").value,
                 taskAssignee: document.getElementById("taskAssignee").value
             };
 
@@ -94,6 +117,11 @@
                 body: JSON.stringify(formData)
             })
                 .then(function(response) {
+                    if (response.status === 201) {
+                        window.location.href = './dashboard';
+                    } else {
+                        // Обработайте другие статусы, если необходимо
+                    }
                     // Обработайте ответ от сервера, если необходимо
                 })
                 .catch(function(error) {

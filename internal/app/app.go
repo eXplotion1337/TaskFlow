@@ -3,6 +3,8 @@ package app
 import (
 	"TaskFlow/internal/config"
 	"TaskFlow/internal/handlers"
+	"TaskFlow/internal/repository"
+	"database/sql"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"log"
@@ -11,7 +13,7 @@ import (
 	"strings"
 )
 
-func Run(config *config.Config) error {
+func Run(config *config.Config, storage repository.Storage) error {
 	router := chi.NewRouter()
 
 	// Middleware для логирования запросов
@@ -31,7 +33,23 @@ func Run(config *config.Config) error {
 	})
 
 	router.Post("/createNewTask", func(w http.ResponseWriter, r *http.Request) {
-		handlers.PostNewTask(w, r)
+		handlers.PostNewTask(w, r, storage)
+	})
+
+	router.Get("/createNewProject", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/createNewProject/createNewProject.html")
+	})
+
+	router.Post("/createNewProject", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostNewProject(w, r, storage)
+	})
+
+	router.Post("/api/alltask", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostAllTasks(w, r, storage)
+	})
+
+	router.Post("/api/movetask", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostMoveTask(w, r, storage)
 	})
 
 	// Обработчики для статических файлов (стили и скрипты)
@@ -57,6 +75,9 @@ func InitConfig() (*config.Config, error) {
 			Port: GetEnvAsStr("HTTP_PORT", ":8080"),
 			Host: GetEnvAsStr("HTTP_HOST", "localhost"),
 		},
+		DataBase: &config.DataBase{
+			DSN: GetEnvAsStr("DSN", "postgresql://postgres:123123@localhost:5432/postgres?sslmode=disable"),
+		},
 	}
 	return &Config, nil
 }
@@ -68,4 +89,16 @@ func GetEnvAsStr(name string, defaultValue string) string {
 	}
 
 	return valStr
+}
+
+func InitStorage(config *config.Config) (repository.Storage, error) {
+	db, err := sql.Open("postgres", config.DataBase.DSN)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	storage := repository.NewDatabaseStorage(db)
+
+	return storage, nil
 }

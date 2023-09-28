@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TaskFlow - Создать проект</title>
+    <!-- Подключаем стили Bootstrap и пользовательские стили -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../styles/style.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="../main/main.html" id="TaskFlowLink">TaskFlow</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./createNewTask/create-task.html" id="createNewTask">Create New Task</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Chat</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">About Me</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container content">
+    <div class="row mt-4">
+        <div class="col-md">
+            <h2>Создать новый проект</h2>
+            <form id="createTaskForm">
+                <div class="form-group">
+                    <label for="NameProject">Название проекта</label>
+                    <input type="text" class="form-control" id="NameProject" placeholder="Введите название проекта">
+                </div>
+                <div class="form-group">
+                    <label for="Description">Описание проекта</label>
+                    <textarea class="form-control" id="Description" rows="4" placeholder="Введите описание проекта"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="Collaborators">Название проекта</label>
+                    <input type="text" class="form-control" id="Collaborators" placeholder="Участники">
+                </div>
+                <button type="submit" class="btn btn-primary">Создать проект</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Подключаем скрипты Bootstrap и пользовательский JavaScript, а также библиотеку Sortable.js -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+<script src="../scripts/script.js"></script>
+
+<script>
+    document.getElementById("dashboardLink").addEventListener("click", function(event) {
+        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+        window.location.href = "./dashboard"; // Выполнить редирект на желаемую страницу
+    });
+
+    document.getElementById("createNewTask").addEventListener("click", function(event) {
+        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+        window.location.href = "./createNewTask"; // Выполнить редирект на желаемую страницу
+    });
+
+    document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
+        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+        window.location.href = "./"; // Выполнить редирект на желаемую страницу
+    });
+
+    document.getElementById("createNewProject").addEventListener("click", function(event) {
+        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+        window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+    });
+
+    document.getElementById("createTaskForm").addEventListener("submit", function(event) {
+        event.preventDefault(); // Предотвратить стандартное действие отправки формы
+
+        // Соберите данные из формы в объект JSON
+        let formData = {
+            NameProject: document.getElementById("NameProject").value,
+            Description: document.getElementById("Description").value,
+            Collaborators: document.getElementById("Collaborators").value,
+        };
+
+        // Отправьте POST-запрос на сервер
+        fetch("http://localhost:8080/createNewProject", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(function(response) {
+                if (response.status === 201) {
+                    window.location.href = './dashboard';
+                } else {
+                    // Обработайте другие статусы, если необходимо
+                }
+                // Обработайте ответ от сервера, если необходимо
+            })
+            .catch(function(error) {
+                // Обработайте ошибку, если она произошла
+                console.error("Произошла ошибка при отправке запроса:", error);
+            });
+    });
+
+</script>
+
+</body>
+</html>

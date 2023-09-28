@@ -41,6 +41,9 @@
                     <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="../createNewTask/create-task.html" id="createNewTask">Create New Task</a>
                 </li>
                 <li class="nav-item">
@@ -79,6 +82,10 @@
         document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
             event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
             window.location.href = "./"; // Выполнить редирект на желаемую страницу
+        });
+        document.getElementById("createNewProject").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
         });
     </script>
 </body>

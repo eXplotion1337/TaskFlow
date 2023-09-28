@@ -12,7 +12,12 @@ func main() {
 		log.Fatal("fail load config", err)
 	}
 
-	err = app.Run(config)
+	storage, err := app.InitStorage(config)
+	if err != nil {
+		log.Fatal("fail create storage", err)
+	}
+
+	err = app.Run(config, storage)
 	if err != nil {
 		log.Fatal("fail run server", err)
 	}

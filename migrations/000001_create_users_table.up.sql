@@ -6,8 +6,10 @@ CREATE TABLE tasks (
     "user" TEXT DEFAULT '' NOT NULL,
     "time_start" TEXT DEFAULT '' NOT NULL,
     "time_end" TEXT DEFAULT '' NOT NULL,
-    "creator" "time_start" TEXT DEFAULT '' NOT NULL,
+    "creator" TEXT DEFAULT '' NOT NULL,
+    "colum_task" TEXT DEFAULT '' NOT NULL,
     "project" TEXT DEFAULT '' NOT NULL
+
 );
 
 CREATE TABLE users (

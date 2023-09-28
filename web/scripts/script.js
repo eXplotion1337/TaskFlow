@@ -63,21 +63,65 @@ document.addEventListener('DOMContentLoaded', function () {
         const toColumn = evt.to.id;
 
         if (fromColumn !== toColumn) {
+            console.log(fromColumn, toColumn)
+
             // Если задача перемещается между колонками, измените статус задачи соответственно
             if (toColumn === 'column-in-progress') {
                 // Задача перемещается в "В работе"
                 item.classList.add('list-group-item-primary');
+                // Отправляем POST-запрос на сервер
+                sendMoveTaskRequest(item, 'В работе');
             } else if (toColumn === 'column-in-review') {
                 // Задача перемещается в "В ревью"
                 item.classList.add('list-group-item-warning');
+                // Отправляем POST-запрос на сервер
+                sendMoveTaskRequest(item, 'В ревью');
             } else if (toColumn === 'column-completed') {
                 // Задача перемещается в "Завершенные"
                 item.classList.add('list-group-item-success');
+                // Отправляем POST-запрос на сервер
+                sendMoveTaskRequest(item, 'Завершенные');
             } else if (toColumn === 'column-free') {
                 // Задача перемещается обратно в "Свободные"
                 item.classList.remove('list-group-item-primary', 'list-group-item-warning', 'list-group-item-success');
+                // Отправляем POST-запрос на сервер
+                sendMoveTaskRequest(item, 'Свободные');
             }
         }
     }
 });
+
+function sendMoveTaskRequest(taskName, column) {
+    // Создаем объект JSON для отправки на сервер
+    console.log(taskName)
+    const taskTitle = taskName.textContent.trim();
+
+    console.log(taskTitle)
+
+
+    const requestData = {
+        Name: taskTitle,
+        Column: column
+    };
+
+    // Отправляем POST-запрос на сервер
+    fetch('http://localhost:8080/api/movetask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log(`Задача "${taskName}" успешно перемещена в колонку "${column}".`);
+            } else {
+                console.error(`Ошибка при перемещении задачи "${taskName}" в колонку "${column}".`);
+            }
+        })
+        .catch(error => {
+            console.error(`Произошла ошибка при отправке POST-запроса: ${error}`);
+        });
+}
+
 

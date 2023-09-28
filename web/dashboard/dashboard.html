@@ -19,6 +19,9 @@
                     <a class="nav-link" href="dashboard.html" id="dashboardLink">Dashboard</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="../createNewTask/create-task.html" id="createNewTask">Create New Task</a>
                 </li>
                 <li class="nav-item">
@@ -66,6 +69,7 @@
             </div>
         </div>
     </div>
+
     <!-- Подключаем скрипты Bootstrap и пользовательский JavaScript, а также библиотеку Sortable.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
@@ -88,6 +92,71 @@
             event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
             window.location.href = "./"; // Выполнить редирект на желаемую страницу
         });
+        document.getElementById("createNewProject").addEventListener("click", function(event) {
+            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
+            window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            // Создаем объект XMLHttpRequest
+            let xhr = new XMLHttpRequest();
+
+            // Устанавливаем метод и URL для запроса
+            xhr.open("POST", "http://localhost:8080/api/alltask", true);
+
+            // Устанавливаем обработчик события при успешном завершении запроса
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    // Попытаемся преобразовать ответ в объект JSON
+                    try {
+                        let tasks = JSON.parse(xhr.responseText);
+                        // Здесь tasks представляет массив задач
+                        console.log("Успешный запрос!");
+                        console.log(tasks);
+
+                        // Теперь вы можете использовать данные для заполнения вашей страницы
+                        // Например, добавить задачи в соответствующие списки на вашей странице
+
+                        // Пример:
+                        let freeTasksList = document.getElementById("column-free");
+                        let inProgressTasksList = document.getElementById("column-in-progress");
+                        let inReviewTasksList = document.getElementById("column-in-review");
+                        let completedTasksList = document.getElementById("column-completed");
+
+                        tasks.forEach(function (task) {
+                            let listItem = document.createElement("li");
+                            listItem.textContent = task.taskTitle;
+
+                            // В зависимости от значения task.Colum, добавьте задачу в соответствующий список
+                            switch (task.Colum) {
+                                case "Свободные":
+                                    freeTasksList.appendChild(listItem);
+                                    break;
+                                case "В работе":
+                                    inProgressTasksList.appendChild(listItem);
+                                    break;
+                                case "В ревью":
+                                    inReviewTasksList.appendChild(listItem);
+                                    break;
+                                case "Завершенные":
+                                    completedTasksList.appendChild(listItem);
+                                    break;
+                                default:
+                                    // Обработка неизвестных значений Colum
+                                    break;
+                            }
+                        });
+                    } catch (e) {
+                        console.error("Ошибка при разборе JSON: " + e);
+                    }
+                } else {
+                    // Обработка ошибок
+                    console.error("Произошла ошибка: " + xhr.status);
+                }
+            };
+            xhr.send();
+        });
+
     </script>
+
 </body>
 </html>
