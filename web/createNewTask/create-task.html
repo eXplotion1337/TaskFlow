@@ -19,7 +19,7 @@
                     <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                    <a class="nav-link" href="../Projects/projects.html" id="Projects">Projects</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="create-task.html" id="createNewTask">Create New Task</a>
@@ -40,27 +40,27 @@
                 <form id="createTaskForm">
                     <div class="form-group">
                         <label for="NameProjects">Проект</label>
-                        <input type="text" class="form-control" id="NameProjects" placeholder="Введите название проекта">
+                        <input type="text" class="form-control" id="NameProjects" placeholder="Введите название проекта" required>
                     </div>
                     <div class="form-group">
                         <label for="taskTitle">Название задачи</label>
-                        <input type="text" class="form-control" id="taskTitle" placeholder="Введите название задачи">
+                        <input type="text" class="form-control" id="taskTitle" placeholder="Введите название задачи" required>
                     </div>
                     <div class="form-group">
                         <label for="taskDescription">Описание задачи</label>
-                        <textarea class="form-control" id="taskDescription" rows="4" placeholder="Введите описание задачи"></textarea>
+                        <textarea class="form-control" id="taskDescription" rows="4" placeholder="Введите описание задачи" required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="TimeStart">Время начала</label>
-                        <textarea class="form-control" id="TimeStart"  placeholder="Введите время начала "></textarea>
+                        <textarea class="form-control" id="TimeStart"  placeholder="Введите время начала " required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="TimeEnd">Время начала</label>
-                        <textarea class="form-control" id="TimeEnd"  placeholder="Введите время завершения "></textarea>
+                        <textarea class="form-control" id="TimeEnd"  placeholder="Введите время завершения " required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="taskAssignee">Исполнитель</label>
-                        <input type="text" class="form-control" id="taskAssignee" placeholder="Введите имя исполнителя">
+                        <input type="text" class="form-control" id="taskAssignee" placeholder="Введите имя исполнителя" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Создать задачу</button>
                 </form>
@@ -76,28 +76,127 @@
 
     <script>
         document.getElementById("dashboardLink").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./dashboard"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./dashboard", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
         });
 
         document.getElementById("createNewTask").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./createNewTask"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./createNewTask", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            // window.location.href = "./createNewTask";
         });
+
+        function makeRequest(url, token) {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url, true);
+            // Устанавливаем заголовок Authorization
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+            xhr.setRequestHeader('Cache-Control', 'no-cache');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Обработка успешного ответа
+                        console.log(xhr.responseText);
+
+                        // Редирект на другую страницу
+                        window.location.href = url;
+                    } else {
+                        // Обработка ошибки
+                        console.error('Ошибка запроса:', xhr.status, xhr.statusText);
+                    }
+                }
+            }
+            // Отправляем запрос
+            // xhr.open('GET', url, true);
+            xhr.send();
+        }
 
         document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            // window.location.href = "./";
         });
 
-        document.getElementById("createNewProject").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+        document.getElementById("Projects").addEventListener("click", function(event) {
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./Projects", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            // window.location.href = "./Projects";
         });
 
         document.getElementById("createTaskForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Предотвратить стандартное действие отправки формы
 
+            // Получите значение NameProjects из формы
+            let projectName = document.getElementById("NameProjects").value;
+            let accessToken = localStorage.getItem('token');
+            // Отправьте POST-запрос для проверки наличия проекта
+            fetch(`/api/checkProdject/${projectName}`, {
+                method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+
+                },
+            })
+                .then(function(response) {
+                    if (response.status === 200) {
+                        // Если проект существует, создайте задачу
+                        createTask();
+                        let accessToken = localStorage.getItem('token');
+
+                        if (accessToken) {
+                            makeRequest("./dashboard", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                            // window.location.href = "./dashboard";
+                        } else {
+                            // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                            window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+                        }
+                    } else {
+                        // Если проект не существует, предупредите пользователя
+                        alert("Проект не найден. Пожалуйста, проверьте название проекта.");
+                    }
+                })
+                .catch(function(error) {
+                    console.error("Произошла ошибка при проверке проекта:", error);
+                });
+        });
+
+        // Функция для создания задачи
+        function createTask() {
             // Соберите данные из формы в объект JSON
             let formData = {
                 taskTitle: document.getElementById("taskTitle").value,
@@ -106,13 +205,17 @@
                 TimeEnd: document.getElementById("TimeEnd").value,
                 NameProjects: document.getElementById("NameProjects").value,
                 taskAssignee: document.getElementById("taskAssignee").value
+
             };
 
-            // Отправьте POST-запрос на сервер
-            fetch("http://localhost:8080/createNewTask", {
+            let accessToken = localStorage.getItem('token');
+
+            // Отправьте POST-запрос на сервер для создания задачи
+            fetch("./createNewTask", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": 'Bearer ' + accessToken
                 },
                 body: JSON.stringify(formData)
             })
@@ -128,7 +231,7 @@
                     // Обработайте ошибку, если она произошла
                     console.error("Произошла ошибка при отправке запроса:", error);
                 });
-        });
+        }
 
     </script>
 

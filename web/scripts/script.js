@@ -104,16 +104,28 @@ function sendMoveTaskRequest(taskName, column) {
         Column: column
     };
 
+    let accessToken = localStorage.getItem('token');
+    if (!accessToken) {
+        console.error('Токен отсутствует.');
+        return;
+    }
+    let token = 'Bearer ' + accessToken;
+    console.log(token);
+
     // Отправляем POST-запрос на сервер
-    fetch('http://localhost:8080/api/movetask', {
+    fetch('../api/movetask', {
         method: 'POST',
         headers: {
+            'Authorization': 'Bearer ' + accessToken,
             'Content-Type': 'application/json'
+
         },
+
         body: JSON.stringify(requestData)
     })
         .then(response => {
             if (response.ok) {
+                console.log(`Задача "${taskName}" успешно перемещена в колонку "${column}".`);
                 console.log(`Задача "${taskName}" успешно перемещена в колонку "${column}".`);
             } else {
                 console.error(`Ошибка при перемещении задачи "${taskName}" в колонку "${column}".`);

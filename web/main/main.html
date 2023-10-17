@@ -27,6 +27,15 @@
             margin-top: 30px; /* Отступ сверху 30px */
             text-align: center; /* Выравниваем по центру горизонтально */
         }
+        .buttons-container {
+            margin-top: 20px; /* Отступ сверху 20px */
+            display: flex;
+            gap: 10px; /* Промежуток между кнопками */
+        }
+
+        .buttons-container button {
+            font-size: 1.5em; /* Размер шрифта кнопок */
+        }
     </style>
 </head>
 <body>
@@ -41,7 +50,7 @@
                     <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                    <a class="nav-link" href="../Projects/projects.html" id="Projects">Projects</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../createNewTask/create-task.html" id="createNewTask">Create New Task</a>
@@ -60,6 +69,11 @@
         <h1>TASK FLOW</h1>
         <!-- Новая надпись будет размещена чуть ниже "TASK FLOW" -->
         <h2>Каждая task'а нуждается в ласке</h2>
+
+        <div class="buttons-container">
+            <button class="btn btn-primary">Регистрация</button>
+            <button class="btn btn-success">Вход</button>
+        </div>
     </div>
     <!-- Подключаем скрипты Bootstrap и пользовательский JavaScript, а также библиотеку Sortable.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -70,22 +84,97 @@
     
     <script>
         document.getElementById("dashboardLink").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./dashboard"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./dashboard", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
         });
 
         document.getElementById("createNewTask").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./createNewTask"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./createNewTask", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            // window.location.href = "./createNewTask";
         });
 
         document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./"; // Выполнить редирект на желаемую страницу
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            // window.location.href = "./";
         });
-        document.getElementById("createNewProject").addEventListener("click", function(event) {
-            event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-            window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+
+        document.getElementById("Projects").addEventListener("click", function(event) {
+            event.preventDefault();
+            let accessToken = localStorage.getItem('token');
+
+            if (accessToken) {
+                makeRequest("./Projects", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                // window.location.href = "./dashboard";
+            } else {
+                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+            }
+            window.location.href = "./Projects";
+        });
+
+        function makeRequest(url, token) {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('GET', url, true);
+            // Устанавливаем заголовок Authorization
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+            xhr.setRequestHeader('Cache-Control', 'no-cache');
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        // Обработка успешного ответа
+                        console.log(xhr.responseText);
+
+                        // Редирект на другую страницу
+                        window.location.href = url;
+                    } else {
+                        // Обработка ошибки
+                        console.error('Ошибка запроса:', xhr.status, xhr.statusText);
+                    }
+                }
+            }
+            // Отправляем запрос
+            // xhr.open('GET', url, true);
+            xhr.send();
+        }
+
+        document.querySelector(".buttons-container .btn-primary").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "./sing-up";
+        });
+
+        // Добавляем действие для кнопки "Вход"
+        document.querySelector(".buttons-container .btn-success").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "./sing-in";
         });
     </script>
 </body>

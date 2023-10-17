@@ -6,6 +6,27 @@
     <!-- Подключаем стили Bootstrap и пользовательские стили -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../styles/style.css">
+    <style>
+        .project-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        .projects-heading {
+            margin-bottom: 20px;
+        }
+
+        #createProjectBtn {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        /* Новые стили для кнопки "Создать новый проект" */
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,7 +40,7 @@
                 <a class="nav-link" href="../dashboard/dashboard.html" id="dashboardLink">Dashboard</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../createNewProject/createNewProject.html" id="createNewProject">Create New Project</a>
+                <a class="nav-link" href="../Projects/projects.html" id="Projects">Projects</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./createNewTask/create-task.html" id="createNewTask">Create New Task</a>
@@ -40,15 +61,15 @@
             <form id="createTaskForm">
                 <div class="form-group">
                     <label for="NameProject">Название проекта</label>
-                    <input type="text" class="form-control" id="NameProject" placeholder="Введите название проекта">
+                    <input type="text" class="form-control" id="NameProject" placeholder="Введите название проекта" required>
                 </div>
                 <div class="form-group">
                     <label for="Description">Описание проекта</label>
-                    <textarea class="form-control" id="Description" rows="4" placeholder="Введите описание проекта"></textarea>
+                    <textarea class="form-control" id="Description" rows="4" placeholder="Введите описание проекта" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="Collaborators">Название проекта</label>
-                    <input type="text" class="form-control" id="Collaborators" placeholder="Участники">
+                    <label for="Collaborators">Участники</label>
+                    <input type="text" class="form-control" id="Collaborators" placeholder="Участники" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Создать проект</button>
             </form>
@@ -64,28 +85,95 @@
 
 <script>
     document.getElementById("dashboardLink").addEventListener("click", function(event) {
-        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-        window.location.href = "./dashboard"; // Выполнить редирект на желаемую страницу
+        event.preventDefault();
+        let accessToken = localStorage.getItem('token');
+
+        if (accessToken) {
+            makeRequest("./dashboard", accessToken); // Выполняем переход с токеном в заголовке Authorization
+            // window.location.href = "./dashboard";
+        } else {
+            // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+            window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+        }
     });
 
     document.getElementById("createNewTask").addEventListener("click", function(event) {
-        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-        window.location.href = "./createNewTask"; // Выполнить редирект на желаемую страницу
+        event.preventDefault();
+        let accessToken = localStorage.getItem('token');
+
+        if (accessToken) {
+            makeRequest("./createNewTask", accessToken); // Выполняем переход с токеном в заголовке Authorization
+            // window.location.href = "./dashboard";
+        } else {
+            // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+            window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+        }
+        // window.location.href = "./createNewTask";
     });
 
     document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
-        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-        window.location.href = "./"; // Выполнить редирект на желаемую страницу
-    });
+        event.preventDefault();
+        let accessToken = localStorage.getItem('token');
 
-    document.getElementById("createNewProject").addEventListener("click", function(event) {
-        event.preventDefault(); // Предотвратить стандартное действие перехода по ссылке
-        window.location.href = "./createNewProject"; // Выполнить редирект на желаемую страницу
+        if (accessToken) {
+            makeRequest("./", accessToken); // Выполняем переход с токеном в заголовке Authorization
+            // window.location.href = "./dashboard";
+        } else {
+            // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+            window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+        }
+        // window.location.href = "./";
+    });
+    function makeRequest(url, token) {
+        let xhr = new XMLHttpRequest();
+
+        xhr.open('GET', url, true);
+        // Устанавливаем заголовок Authorization
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+        xhr.setRequestHeader('Cache-Control', 'no-cache');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    // Обработка успешного ответа
+                    console.log(xhr.responseText);
+
+                    // Редирект на другую страницу
+                    window.location.href = url;
+                } else {
+                    // Обработка ошибки
+                    console.error('Ошибка запроса:', xhr.status, xhr.statusText);
+                }
+            }
+        }
+        // Отправляем запрос
+        // xhr.open('GET', url, true);
+        xhr.send();
+    }
+
+    document.getElementById("Projects").addEventListener("click", function(event) {
+        event.preventDefault();
+        let accessToken = localStorage.getItem('token');
+
+        if (accessToken) {
+            makeRequest("./Projects", accessToken); // Выполняем переход с токеном в заголовке Authorization
+            // window.location.href = "./dashboard";
+        } else {
+            // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+            window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+        }
+        window.location.href = "./Projects";
     });
 
     document.getElementById("createTaskForm").addEventListener("submit", function(event) {
         event.preventDefault(); // Предотвратить стандартное действие отправки формы
 
+        let projectName = document.getElementById("NameProject").value;
+        if (projectName.trim() === "") {
+            alert("Пожалуйста, заполните поле 'Название проекта'");
+            return;
+        }
         // Соберите данные из формы в объект JSON
         let formData = {
             NameProject: document.getElementById("NameProject").value,
@@ -93,17 +181,28 @@
             Collaborators: document.getElementById("Collaborators").value,
         };
 
+        let accessToken = localStorage.getItem('token');
         // Отправьте POST-запрос на сервер
-        fetch("http://localhost:8080/createNewProject", {
+        fetch("./createNewProject", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + accessToken
             },
             body: JSON.stringify(formData)
         })
             .then(function(response) {
                 if (response.status === 201) {
-                    window.location.href = './dashboard';
+                    let accessToken = localStorage.getItem('token');
+
+                    if (accessToken) {
+                        makeRequest("./Projects", accessToken); // Выполняем переход с токеном в заголовке Authorization
+                        // window.location.href = "./dashboard";
+                    } else {
+                        // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
+                        window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
+                    }
+                    // window.location.href = './dashboard';
                 } else {
                     // Обработайте другие статусы, если необходимо
                 }

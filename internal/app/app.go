@@ -3,6 +3,7 @@ package app
 import (
 	"TaskFlow/internal/config"
 	"TaskFlow/internal/handlers"
+	my_middleware "TaskFlow/internal/middleware"
 	"TaskFlow/internal/repository"
 	"database/sql"
 	"github.com/go-chi/chi"
@@ -18,6 +19,7 @@ func Run(config *config.Config, storage repository.Storage) error {
 
 	// Middleware для логирования запросов
 	router.Use(middleware.Logger)
+	router.Use(my_middleware.AuthMiddleware)
 
 	// Обработчики для страниц
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
@@ -50,6 +52,42 @@ func Run(config *config.Config, storage repository.Storage) error {
 
 	router.Post("/api/movetask", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostMoveTask(w, r, storage)
+	})
+
+	router.Get("/Projects", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/Projects/projects.html")
+	})
+
+	router.Post("/api/allprojects", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostAllProject(w, r, storage)
+	})
+
+	router.Get("/dashboard/{id}", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/dashboard/task_for_project/task_for_project.html")
+	})
+
+	router.Post("/api/dashboard/tasks/{id}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostSelectTaskByProject(w, r, storage)
+	})
+
+	router.Post("/api/checkProdject/{id}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostCheckProjectExist(w, r, storage)
+	})
+
+	router.Post("/auth/sing-in", func(w http.ResponseWriter, r *http.Request) {
+		handlers.SingIn(w, r, storage)
+	})
+
+	router.Post("/auth/sing-up", func(w http.ResponseWriter, r *http.Request) {
+		handlers.SingUp(w, r, storage)
+	})
+
+	router.Get("/sing-in", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/auth/sing-in.html")
+	})
+
+	router.Get("/sing-up", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./web/auth/sing-up.html")
 	})
 
 	// Обработчики для статических файлов (стили и скрипты)
