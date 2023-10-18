@@ -1,0 +1,17 @@
+.project-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
+    background-color: #fff;
+}
+
+.projects-heading {
+    margin-bottom: 20px;
+}
+
+#createProjectBtn {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}

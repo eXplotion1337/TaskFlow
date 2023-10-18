@@ -6,37 +6,7 @@
     <!-- Подключаем стили Bootstrap и пользовательские стили -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../styles/style.css">
-    <style>
-        /* Применяем стили для надписи */
-        .full-page-header {
-            height: 100vh; /* Занимает всю высоту видимой области экрана */
-            display: flex;
-            flex-direction: column; /* Столбцовая ориентация для вертикального центрирования */
-            justify-content: flex-start; /* Выравниваем по верхнему краю вертикально */
-            align-items: center; /* Выравниваем по центру горизонтально */
-        }
-
-        /* Стили для текста надписи "TASK FLOW" */
-        .full-page-header h1 {
-            font-size: 20em; /* Размер шрифта */
-        }
-
-        /* Стили для новой надписи "Каждая task'а нуждается в ласке" */
-        .full-page-header h2 {
-            font-size: 2em; /* Размер шрифта */
-            margin-top: 30px; /* Отступ сверху 30px */
-            text-align: center; /* Выравниваем по центру горизонтально */
-        }
-        .buttons-container {
-            margin-top: 20px; /* Отступ сверху 20px */
-            display: flex;
-            gap: 10px; /* Промежуток между кнопками */
-        }
-
-        .buttons-container button {
-            font-size: 1.5em; /* Размер шрифта кнопок */
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../styles/main.css">
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -81,101 +51,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="../scripts/script.js"></script>
-    
-    <script>
-        document.getElementById("dashboardLink").addEventListener("click", function(event) {
-            event.preventDefault();
-            let accessToken = localStorage.getItem('token');
-
-            if (accessToken) {
-                makeRequest("./dashboard", accessToken); // Выполняем переход с токеном в заголовке Authorization
-                // window.location.href = "./dashboard";
-            } else {
-                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
-                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
-            }
-        });
-
-        document.getElementById("createNewTask").addEventListener("click", function(event) {
-            event.preventDefault();
-            let accessToken = localStorage.getItem('token');
-
-            if (accessToken) {
-                makeRequest("./createNewTask", accessToken); // Выполняем переход с токеном в заголовке Authorization
-                // window.location.href = "./dashboard";
-            } else {
-                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
-                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
-            }
-            // window.location.href = "./createNewTask";
-        });
-
-        document.getElementById("TaskFlowLink").addEventListener("click", function(event) {
-            event.preventDefault();
-            let accessToken = localStorage.getItem('token');
-
-            if (accessToken) {
-                makeRequest("./", accessToken); // Выполняем переход с токеном в заголовке Authorization
-                // window.location.href = "./dashboard";
-            } else {
-                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
-                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
-            }
-            // window.location.href = "./";
-        });
-
-        document.getElementById("Projects").addEventListener("click", function(event) {
-            event.preventDefault();
-            let accessToken = localStorage.getItem('token');
-
-            if (accessToken) {
-                makeRequest("./Projects", accessToken); // Выполняем переход с токеном в заголовке Authorization
-                // window.location.href = "./dashboard";
-            } else {
-                // Если токен отсутствует, можешь перенаправить пользователя на страницу входа
-                window.location.href = "./sing-in"; // Измени в соответствии с реальным путем
-            }
-            window.location.href = "./Projects";
-        });
-
-        function makeRequest(url, token) {
-            let xhr = new XMLHttpRequest();
-
-            xhr.open('GET', url, true);
-            // Устанавливаем заголовок Authorization
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-
-            xhr.setRequestHeader('Cache-Control', 'no-cache');
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        // Обработка успешного ответа
-                        console.log(xhr.responseText);
-
-                        // Редирект на другую страницу
-                        window.location.href = url;
-                    } else {
-                        // Обработка ошибки
-                        console.error('Ошибка запроса:', xhr.status, xhr.statusText);
-                    }
-                }
-            }
-            // Отправляем запрос
-            // xhr.open('GET', url, true);
-            xhr.send();
-        }
-
-        document.querySelector(".buttons-container .btn-primary").addEventListener("click", function(event) {
-            event.preventDefault();
-            window.location.href = "./sing-up";
-        });
-
-        // Добавляем действие для кнопки "Вход"
-        document.querySelector(".buttons-container .btn-success").addEventListener("click", function(event) {
-            event.preventDefault();
-            window.location.href = "./sing-in";
-        });
-    </script>
+    <script src="../scripts/main.js"></script>
 </body>
 </html>

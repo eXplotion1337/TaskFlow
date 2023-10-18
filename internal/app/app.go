@@ -90,6 +90,10 @@ func Run(config *config.Config, storage repository.Storage) error {
 		http.ServeFile(w, r, "./web/auth/sing-up.html")
 	})
 
+	router.Get("/ping/ping", func(w http.ResponseWriter, r *http.Request) {
+		handlers.Ping(w, r, storage)
+	})
+
 	// Обработчики для статических файлов (стили и скрипты)
 	fs := http.FileServer(http.Dir("./web"))
 	router.Handle("/styles/*", fs)

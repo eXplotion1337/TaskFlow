@@ -1,8 +1,9 @@
+
 version: "3.8"
 
 services:
   postgres:
-    container_name: TaskFlowflow-postgres4
+    container_name: postgres-main
     image: postgres
     volumes:
       - pg-data4:/var/lib/postgresql/data
@@ -14,6 +15,17 @@ services:
       POSTGRES_PASSWORD: "123123"
     ports:
       - "5432:5432"
+    restart: unless-stopped
+
+  app:
+    container_name: golang-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
     restart: unless-stopped
 
 volumes:

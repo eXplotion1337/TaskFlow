@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi"
 	"log"
 	"net/http"
+	"os"
 )
 
 func PostNewTask(w http.ResponseWriter, r *http.Request, storage repository.Storage) {
@@ -220,4 +221,9 @@ func SingUp(w http.ResponseWriter, r *http.Request, storage repository.Storage) 
 	// Возвращаем успешный ответ
 	w.WriteHeader(http.StatusCreated)
 	w.Write([]byte("User created successfully"))
+}
+
+func Ping(w http.ResponseWriter, r *http.Request, storage repository.Storage) {
+	dsn := os.Getenv("DSN")
+	storage.Ping(dsn)
 }

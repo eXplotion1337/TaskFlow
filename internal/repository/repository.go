@@ -46,6 +46,7 @@ type Storage interface {
 	GetUserByUsername(username string) (*auth.User, error)
 	UserExists(username string) (bool, error)
 	CreateUser(user auth.User) error
+	Ping(dsn string)
 }
 
 type Postgres struct {
@@ -239,4 +240,15 @@ func (db *Postgres) CreateUser(user auth.User) error {
 	query := "INSERT INTO users (login, password, token) VALUES ($1, $2, $3)"
 	_, err := db.db.Exec(query, user.Username, user.Password, user.Token)
 	return err
+}
+
+func (db *Postgres) Ping(dsn string) {
+	err := db.db.Ping()
+	if err != nil {
+		fmt.Println(err)
+		//http.Error(w, "500 Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	fmt.Println("Apply")
+	//return nil
 }

@@ -1,0 +1,41 @@
+/* Your existing styles here */
+
+/* Additional styles for registration page */
+.full-page-header {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.full-page-header h1 {
+    font-size: 20em;
+}
+
+.full-page-header h2 {
+    font-size: 2em;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.registration-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.registration-container input {
+    width: 300px;
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 8px; /* Rounded corners */
+}
+
+.registration-container button {
+    width: 300px;
+    font-size: 1.5em;
+    border-radius: 8px; /* Rounded corners */
+}
