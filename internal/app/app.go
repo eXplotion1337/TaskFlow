@@ -8,6 +8,7 @@ import (
 	"database/sql"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -20,6 +21,12 @@ func Run(config *config.Config, storage repository.Storage) error {
 	// Middleware для логирования запросов
 	router.Use(middleware.Logger)
 	router.Use(my_middleware.AuthMiddleware)
+	router.Use(my_middleware.PromMiddleware)
+
+	router.Get("/prom/metrics", func(w http.ResponseWriter, r *http.Request) {
+		//promhttp.Handler()
+		promhttp.Handler().ServeHTTP(w, r)
+	})
 
 	// Обработчики для страниц
 	router.Get("/", func(w http.ResponseWriter, r *http.Request) {
