@@ -3,15 +3,18 @@ package my_middleware
 import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/prometheus/client_golang/prometheus"
+	"log"
 	"net/http"
 	"strings"
+	"time"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//fmt.Println(r.Header)
 		// Получаем токен из заголовков или cookies
-		if strings.HasPrefix(r.URL.Path, "/scripts/") || strings.HasPrefix(r.URL.Path, "/styles/") || strings.HasPrefix(r.URL.Path, "/web/") || strings.HasPrefix(r.URL.Path, "/ping/") {
+		if strings.HasPrefix(r.URL.Path, "/scripts/") || strings.HasPrefix(r.URL.Path, "/styles/") || strings.HasPrefix(r.URL.Path, "/web/") || strings.HasPrefix(r.URL.Path, "/ping/") || strings.HasPrefix(r.URL.Path, "/prom/") {
 			next.ServeHTTP(w, r)
 			return
 		}
@@ -74,4 +77,35 @@ func isValidToken(tokenStr string) bool {
 	}
 
 	return true
+}
+
+var (
+	requestsTotal = prometheus.NewCounterVec(
+		prometheus.CounterOpts{
+			Name: "http_requests_total",
+			Help: "Total number of HTTP requests",
+		},
+		[]string{"method", "endpoint"},
+	)
+)
+
+func init() {
+	prometheus.MustRegister(requestsTotal)
+}
+
+func PromMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+
+		// Вызываем следующий обработчик в цепочке
+		next.ServeHTTP(w, r)
+
+		// Регистрируем метрику по завершении запроса
+		duration := time.Since(start)
+		log.Println(duration)
+		requestsTotal.WithLabelValues(r.Method, r.URL.Path).Inc()
+
+		// Ты также можешь регистрировать дополнительные метрики, например, время выполнения запроса
+		//requestsDuration.WithLabelValues(r.Method, r.URL.Path).Observe(duration.Seconds())
+	})
 }
